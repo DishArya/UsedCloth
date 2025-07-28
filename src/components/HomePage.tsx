@@ -4,11 +4,20 @@ import { Product } from '../types';
 
 interface HomePageProps {
   products: Product[];
-  onViewProduct: (productId: string) => void;
+  currentUser: User | null;
+  setShowLoginModal: (visible: boolean) => void;
+  requireAuth: (targetSection: 'buy' | 'sell' | 'admin') => void;
 }
 
-const HomePage: React.FC<HomePageProps> = ({ products, onViewProduct }) => {
+const HomePage: React.FC<HomePageProps> = ({ products, currentUser, setShowLoginModal, requireAuth }) => {
   const featuredProducts = products.slice(0, 6);
+  const handleViewProduct = (id: string) => {
+    if (!currentUser) {
+      setShowLoginModal(true);
+    } else {
+      requireAuth('buy');
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-blue-50">
@@ -24,7 +33,7 @@ const HomePage: React.FC<HomePageProps> = ({ products, onViewProduct }) => {
             Sustainable fashion starts here.
           </p>
           <button
-            onClick={() => onViewProduct('')}
+            onClick={() => handleViewProduct('')}
             className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg"
           >
             Start Shopping
@@ -107,7 +116,7 @@ const HomePage: React.FC<HomePageProps> = ({ products, onViewProduct }) => {
                   <div className="flex items-center justify-between">
                     <div className="text-2xl font-bold text-gray-900">${product.price}</div>
                     <button
-                      onClick={() => onViewProduct(product.id)}
+                      onClick={() => handleViewProduct(product.id)}
                       className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
                     >
                       View Details
@@ -120,7 +129,7 @@ const HomePage: React.FC<HomePageProps> = ({ products, onViewProduct }) => {
 
           <div className="text-center mt-12">
             <button
-              onClick={() => onViewProduct('')}
+              onClick={() => handleViewProduct('')}
               className="bg-transparent border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white px-8 py-3 rounded-full font-medium transition-all duration-300"
             >
               View All Items

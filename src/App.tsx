@@ -122,9 +122,9 @@ function App() {
         {currentSection === 'home' && (
           <HomePage 
             products={products.filter(p => p.status === 'available')}
-            onViewProduct={(id) => {
-              setCurrentSection('buy');
-            }}
+            currentUser={currentUser}
+            setShowLoginModal={setShowLoginModal}
+            requireAuth={requireAuth}
           />
         )}
         
